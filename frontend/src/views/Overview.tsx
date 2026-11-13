@@ -4,11 +4,31 @@ import { fetchJson } from '@/api/client'
 
 type Overview = {
   cards: { label: string; value: number }[]
-  modules: { name: string; created: number; pending: number; abnormal: number }[]
+  modules: { name: string; key?: string; created: number; pending: number; abnormal: number }[]
 }
 
 const fallbackCards = [{"label": "业务模块", "value": 0}, {"label": "今日新增", "value": 0}]
-const fallbackModules = [{"name": "站点管理", "created": 0, "pending": 0, "abnormal": 0}, {"name": "抽取模板", "created": 0, "pending": 0, "abnormal": 0}, {"name": "代理池管理", "created": 0, "pending": 0, "abnormal": 0}, {"name": "采集任务", "created": 0, "pending": 0, "abnormal": 0}, {"name": "调度策略", "created": 0, "pending": 0, "abnormal": 0}, {"name": "反爬对抗", "created": 0, "pending": 0, "abnormal": 0}, {"name": "限速控制", "created": 0, "pending": 0, "abnormal": 0}, {"name": "失败重试", "created": 0, "pending": 0, "abnormal": 0}, {"name": "字段映射", "created": 0, "pending": 0, "abnormal": 0}, {"name": "采集流水线", "created": 0, "pending": 0, "abnormal": 0}, {"name": "结果校验", "created": 0, "pending": 0, "abnormal": 0}, {"name": "数据落盘", "created": 0, "pending": 0, "abnormal": 0}, {"name": "采集监控", "created": 0, "pending": 0, "abnormal": 0}, {"name": "数据清洗", "created": 0, "pending": 0, "abnormal": 0}, {"name": "增量采集", "created": 0, "pending": 0, "abnormal": 0}, {"name": "数据分发", "created": 0, "pending": 0, "abnormal": 0}, {"name": "RPA流程", "created": 0, "pending": 0, "abnormal": 0}, {"name": "登录凭证", "created": 0, "pending": 0, "abnormal": 0}]
+const fallbackModules = [
+  {"name": "站点管理", "key": "site", "created": 0, "pending": 0, "abnormal": 0},
+  {"name": "抽取模板", "key": "template", "created": 0, "pending": 0, "abnormal": 0},
+  {"name": "代理池管理", "key": "proxy", "created": 0, "pending": 0, "abnormal": 0},
+  {"name": "采集任务", "key": "spider", "created": 0, "pending": 0, "abnormal": 0},
+  {"name": "调度策略", "key": "schedule", "created": 0, "pending": 0, "abnormal": 0},
+  {"name": "反爬对抗", "key": "antibot", "created": 0, "pending": 0, "abnormal": 0},
+  {"name": "限速控制", "key": "ratelimit", "created": 0, "pending": 0, "abnormal": 0},
+  {"name": "失败重试", "key": "retry", "created": 0, "pending": 0, "abnormal": 0},
+  {"name": "字段映射", "key": "extractor", "created": 0, "pending": 0, "abnormal": 0},
+  {"name": "采集流水线", "key": "pipeline", "created": 0, "pending": 0, "abnormal": 0},
+  {"name": "结果校验", "key": "validator", "created": 0, "pending": 0, "abnormal": 0},
+  {"name": "数据落盘", "key": "storage", "created": 0, "pending": 0, "abnormal": 0},
+  {"name": "采集监控", "key": "monitor", "created": 0, "pending": 0, "abnormal": 0},
+  {"name": "数据清洗", "key": "cleanse", "created": 0, "pending": 0, "abnormal": 0},
+  {"name": "增量采集", "key": "delta", "created": 0, "pending": 0, "abnormal": 0},
+  {"name": "数据分发", "key": "export", "created": 0, "pending": 0, "abnormal": 0},
+  {"name": "RPA流程", "key": "rpaflow", "created": 0, "pending": 0, "abnormal": 0},
+  {"name": "RPA检查点", "key": "rpa_checkpoint", "created": 0, "pending": 0, "abnormal": 0},
+  {"name": "登录凭证", "key": "auth", "created": 0, "pending": 0, "abnormal": 0},
+]
 
 export default function Overview() {
   const [cards, setCards] = useState<Overview['cards']>(fallbackCards)

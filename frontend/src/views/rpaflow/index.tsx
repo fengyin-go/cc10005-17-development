@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { request } from '@/api/client'
 
+import CheckpointDesk from './CheckpointDesk'
+
 const ENDPOINT = '/api/rpaflow'
 const columns = [
   "流程编号",
@@ -19,31 +21,36 @@ const actions = [
   "终止流程",
   "归档结果"
 ]
-const statuses = [
-  "草稿",
-  "待校验",
-  "执行中",
-  "已完成",
-  "已失败"
-]
-const stats = [
-  {
-    "label": "自动化流程总数",
-    "value": 0
-  },
-  {
-    "label": "执行中流程",
-    "value": 0
-  },
-  {
-    "label": "已完成流程",
-    "value": 0
-  }
-]
 
 type Row = Record<string, string | number | null>
 
 export default function RpaflowView() {
+  const [tab, setTab] = useState<'checkpoint' | 'flow'>('checkpoint')
+
+  return (
+    <section className="page" data-module="rpaflow">
+      <div className="tab-bar">
+        <button
+          className={`tab${tab === 'checkpoint' ? ' active' : ''}`}
+          type="button"
+          onClick={() => setTab('checkpoint')}
+        >
+          检查点续做
+        </button>
+        <button
+          className={`tab${tab === 'flow' ? ' active' : ''}`}
+          type="button"
+          onClick={() => setTab('flow')}
+        >
+          流程清单
+        </button>
+      </div>
+      {tab === 'checkpoint' ? <CheckpointDesk /> : <FlowList />}
+    </section>
+  )
+}
+
+function FlowList() {
   const [rows, setRows] = useState<Row[]>([])
   const [total, setTotal] = useState(0)
   const [errorMessage, setErrorMessage] = useState('')
@@ -86,12 +93,20 @@ export default function RpaflowView() {
     }
   }
 
+  const stats = [
+    { label: '自动化流程总数', value: total },
+    { label: '执行中流程', value: 0 },
+    { label: '已完成流程', value: 0 },
+  ]
+
   return (
-    <section className="page" data-module="rpaflow">
+    <>
       <header className="page-head">
         <div>
-          <h2>RPA流程管理</h2>
-          <p className="page-desc">维护RPA自动化流程的输入、执行约束与结果记录，为RPA流程提供可验证的数据工程流程。</p>
+          <h2>RPA流程清单</h2>
+          <p className="page-desc">
+            维护流程定义与执行约束。执行过程请切换到「检查点续做」，逐卡核对网页证据后再推进。
+          </p>
         </div>
         <div className="page-actions">
           <button className="btn primary" type="button" onClick={() => setErrorMessage('自动化流程登记入口尚未接入审批流')}>
@@ -159,6 +174,6 @@ export default function RpaflowView() {
         <span>共 {total} 条RPA流程记录</span>
         {errorMessage && <span className="error-text">{errorMessage}</span>}
       </footer>
-    </section>
+    </>
   )
 }
